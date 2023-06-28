@@ -13,7 +13,7 @@ define('CLIENT_BASE_URL','/app/');
 
 define('APP_DB', 'hrms');
 define('APP_USERNAME', 'hrms_user');
-define('APP_PASSWORD', 'This_is_my_pa$$w0rd');
+define('APP_PASSWORD', 'interwebs1!');
 define('APP_HOST', 'hrm-db');
 define('APP_CON_STR', 'mysqli://'.APP_USERNAME.':'.APP_PASSWORD.'@'.APP_HOST.'/'.APP_DB);
 
