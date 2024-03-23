@@ -1,0 +1,34 @@
+---To deploy Cribl Edge nodes to Windows 11 using Ansible, you'll first need to ensure you have Ansible installed on your control machine. 
+---Additionally, you'll need WinRM for Windows.
+---
+- name: Deploy Cribl Edge Nodes
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Copy Cribl installer to target machine
+      ansible.builtin.copy:
+        src: curl -Lso - $(curl https://cdn.cribl.io/dl/latest-x64) | tar zxv  # Provide the path to your Cribl installer
+        dest: /tmp/cribl_installer.tar.gz   # Destination on the target machine
+
+    - name: Extract Cribl installer
+      ansible.builtin.command:
+        cmd: tar -xzf /tmp/cribl_installer.tar.gz -C /tmp
+      args:
+        executable: /bin/bash
+
+    - name: Install Cribl on Windows
+      ansible.windows.win_shell: |
+        Start-Process -FilePath 'C:\tmp\cribl_installer_windows.exe' -ArgumentList '/S' -Wait
+      args:
+        executable: powershell.exe
+      when: ansible_os_family == 'Windows'
+
+    - name: Clean up installer files
+      ansible.builtin.file:
+        path: /tmp/cribl_installer.tar.gz
+        state: absent
+
+    - name: Ensure Cribl service is running
+      ansible.builtin.service:
+        name: cribl
+        state: started

@@ -1,0 +1,29 @@
+---To deploy Cribl Edge nodes to arm64 OS's, you'll first need to ensure you have ssh client access to your target machine. 
+--- you will need to run the script with sudo priveledges 
+---
+#!/bin/bash
+
+# Define variables
+CRIBL_INSTALLER="cribl_edge_arm64_installer.tar.gz"
+INSTALL_DIR="/opt/cribl"
+
+# Download the Cribl Edge installer
+wget https://cdn.cribl.io/dl/latest-arm64
+
+# Create installation directory
+sudo mkdir -p $INSTALL_DIR
+
+# Extract the installer
+sudo tar -xzf $CRIBL_INSTALLER -C $INSTALL_DIR
+
+# Remove the installer archive (optional)
+rm $CRIBL_INSTALLER
+
+# Run the installer
+sudo $INSTALL_DIR/install.sh
+
+# Start the Cribl Edge service
+sudo systemctl start cribl
+
+# Enable the service to start on boot
+sudo systemctl enable cribl
